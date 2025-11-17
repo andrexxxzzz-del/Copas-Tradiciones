@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EntreCopas & Tradiciones - Versión Final con Galería</title>
+
+    <style>
+        /* ESTILOS GENERALES (SE MANTIENEN) */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #028477, #167D7F);
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4 {
+            text-align: center;
+            font-family: "Times New Roman", serif;
+            color: #000;
+            margin: 10px 0;
+        }
+
+        /* HEADER */
+        header {
+            background-color: #e7f6fc;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .logo {
+            height: 60px;
+            width: auto;
+            margin-right: 20px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+        }
+
+        .titulo-principal {
+            color: #028477;
+            font-family: 'Algerian', serif;
+            margin: 0;
+            font-size: 2em;
+        }
+
+        /* NAV MENU */
+        .nav-menu {
+            background-color: #1a1a1a;
+            text-align: center;
+            padding: 10px 0;
+            z-index: 10;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: #00c8b4;
+        }
+        
+        /* ======================================================= */
+        /* 1. ESTILOS PARA LA NUEVA SECCIÓN DIVIDIDA (CARRUSEL Y QUIÉNES SOMOS) */
+        /* ======================================================= */
+        .content-split-section {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .carousel-container {
+            flex: 2; /* Ocupa 2/3 del espacio */
+            max-width: 65%; 
+        }
+
+        .quienes-somos-box {
+            flex: 1; /* Ocupa 1/3 del espacio */
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            max-width: 35%;
+            color: #fff;
+        }
+
+        .quienes-somos-box h2 {
+            color: #00c8b4;
+            font-family: 'Times New Roman', serif;
+            text-align: center;
+        }
+        
+        .quienes-somos-box p {
+            text-align: justify;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        
+        /* ======================================================= */
+        /* CARRUSEL - AJUSTE DE MARGEN Y ANCHO */
+        /* ======================================================= */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            width: 100%;
+            height: 400px; /* ✅ altura fija */
+        }
+
+        .carousel img {
+            position: absolute; /* CRÍTICO: Permite superposición y el fade */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%; 
+            object-fit: cover;
+            opacity: 0; /* Oculto por defecto */
+            z-index: 0;
+            
+            /* LÍNEA CLAVE: DEFINICIÓN DE LA TRANSICIÓN */
+            transition: opacity 1.2s ease-in-out; /* Duración de 1.2 segundos */
+            
+            border-radius: 12px;
+        }
+
+        .carousel img.active {
+            opacity: 1; /* Muestra la imagen */
+            z-index: 1; /* Pone la activa por encima */
+        }
+
+        .carousel button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.5em;
+            z-index: 2;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .carousel button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel .prev { left: 15px; }
+        .carousel .next { right: 15px; }
+
+        .indicators {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #00c8b4;
+        }
+
+        /* NAV CIUDADES */
+        .nav-ciudades {
+            background-color: #3b3b3b;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .nav-ciudades button {
+            background-color: #3b3b3b;
+            color: white;
+            border: 1px solid #555;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .nav-ciudades button:hover {
+            background-color: #00c8b4;
+            transform: scale(1.05);
+        }
+
+        /* SECCIONES DE CIUDADES */
+        .ciudad {
+            display: none;
+            background-color: rgba(255,255,255,0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 1100px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #fff;
+            animation: fadeIn 0.5s ease;
+        }
+        .ciudad.active { display: block; }
+        .galeria-licores {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .tarjeta {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            text-align: center;
+            padding: 15px;
+            transition: transform 0.3s, background 0.3s;
+            cursor: pointer;
+        }
+        .tarjeta:hover {
+            background: #00c8b4;
+            transform: scale(1.05);
+            color: #000;
+        }
+        .tarjeta img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* SUBCATEGORÍAS */
+        .subcategoria {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            background-color: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 25px auto;
+            width: 90%;
+            max-width: 1100px;
+        }
+
+        .subcategoria.active { display: block; }
+        
+        .galeria-contenido {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .tarjeta-contenido {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            flex: 1 1 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .tarjeta-contenido:hover {
+            box-shadow: 0 6px 12px #00c8b450;
+        }
+
+        .tarjeta-contenido h4 {
+            color: #00c8b4;
+            margin-top: 0;
+            text-align: left;
+        }
+
+        .tarjeta-contenido img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        /* BOTÓN VOLVER */
+        .volver {
+            background-color: #00c8b4;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .volver:hover { background-color: #00a797; }
+
+        /* FOOTER */
+        footer {
+            background-color: #00c8b4;
+            color: black;
+            text-align: center;
+            padding: 20px 10px;
+            font-size: 0.9em;
+        }
+
+        /* MEDIA QUERIES para responsividad */
+        @media (max-width: 900px) {
+            .content-split-section {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .carousel-container, .quienes-somos-box {
+                max-width: 90%;
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            .galeria-contenido {
+                flex-direction: column;
+            }
+            .tarjeta-contenido {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="C:\Users\Andres\OneDrive\Documentos\Ejercicio Pag\Imagenes\LogoSFondo.png" alt="Logo" class="logo"> 
+    <h1 class="titulo-principal">♕Entre Copas & Tradiciones♕</h1>
+</header>
+
+<nav class="nav-menu">
+    <a href="#inicio-seccion">Inicio</a>
+    <a href="#" onclick="toggleCiudades(event)">Bebidas por Ciudad</a>
+    <a href="#contacto">Contacto</a>
+</nav>
+
+<hr><hr>
+
+<section id="inicio-seccion" class="content-split-section">
+    <div class="carousel-container">
+        <div class="carousel">
+            <button class="prev">❮</button>
+            <button class="next">❯</button>
+
+            <img src="https://content.presspage.com/uploads/685/1920_rio1.jpg?10000" alt="Barranquilla-Carnaval">
+            <img src="https://colombia.co/sites/default/files/articles/banner-bogota-colombia.webp" alt="Bogota">
+            <img src="https://ecoglobalexpeditions.com/wp-content/uploads/2017/04/cocuy.jpg" alt="Boyaca">
+            <img src="https://feriadecali.com.co/wp-content/uploads/2024/12/DJI_20241225213558_0262_D-2.jpg" alt="Festival-Cali" class="active">
+            <img src="https://www.medicaltourismpackages.com/wp-content/uploads/cartagena_-walled-city-castillo-san-felipe-rosario-islands-and-beach-escapes.png" alt="Cartagena">
+            <img src="https://www.gaytravel4u.com/wp-content/uploads/2022/02/Festival-of-the-Flowers-Medellin-Feria-de-las-Flores-1.jpg" alt="Medellin">
+        </div>
+        <div class="indicators"></div>
+    </div>
+    
+    <div class="quienes-somos-box">
+        <h2>¿Quiénes Somos?</h2>
+        <p>En ♕Entre Copas & Tradiciones♕, somos una guía cultural dedicada a explorar el fascinante mundo de los licores y las tradiciones de Colombia. Nuestro objetivo es destacar la rica diversidad de bebidas que se consumen en las principales ciudades, desde la costa caribeña hasta los Andes.</p>
+        <p>Creemos que cada copa cuenta una historia. Desde el aguardiente antioqueño en Medellín hasta el ron de la costa en Cartagena, pasando por las cervezas artesanales de Bogotá, buscamos conectar a nuestros visitantes con el sabor auténtico de cada región.</p>
+        <p>¡Explora con nosotros y celebra la tradición colombiana!</p>
+    </div>
+</section>
+<hr><hr>
+
+<div id="ciudades-container" style="display: none;">
+    
+    <nav id="ciudades-nav" class="nav-ciudades">
+        <button onclick="mostrarCiudad('barranquilla')">Barranquilla</button>
+        <button onclick="mostrarCiudad('bogota')">Bogotá</button>
+        <button onclick="mostrarCiudad('boyaca')">Boyacá</button>
+        <button onclick="mostrarCiudad('cali')">Cali</button>
+        <button onclick="mostrarCiudad('cartagena')">Cartagena</button>
+        <button onclick="mostrarCiudad('medellin')">Medellín</button>
+    </nav>
+
+    <section id="barranquilla" class="ciudad">
+        <h2>🍹 Barranquilla</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-cervezas')">
+                <img src="https://i.centralcervecera.com.co/cms/2025/06/10141752/Portafolio-CCC-2025-800-X-800-1.png?w=372&d=2.625" alt="Cervezas">
+                <h3>Cervezas</h3><p>Refrescantes para el clima caribeño.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-vinos')">
+                <img src="https://cdn.colombia.com/sdi/2025/09/02/expovinos-2025-en-bogota-y-medellin-1297479.jpg" alt="Vinos">
+                <h3>Vinos</h3><p>Perfectos para cenas y celebraciones.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-aguardiente')">
+                <img src="https://thumbs.dreamstime.com/b/c%C3%BAcuta-colombia-mar-aguardiente-antioqueno-y-limas-de-limon-c%C3%BAcuta-colombia-mar-delicioso-y-helado-aguardiente-antioqueno-con-201557603.jpg" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>Tradicional en carnavales y fiestas.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-whisky')">
+                <img src="https://dearwhisky.com/wp-content/uploads/2024/02/AdobeStock_279469706_Editorial_Use_Only-scaled.jpeg" alt="Whisky">
+                <h3>Whisky</h3><p>Elegancia para ocasiones especiales.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-vodka')">
+                <img src="https://resizer.glanacion.com/resizer/v2/E7R6PDPWKBCKTAD4XDANHYGR5E.jpg?auth=89052900c8d2c040af3c3ac8ea8e52443d4f5b6f31a030e2852698017a1105de&width=1200&quality=70&smart=false&height=802" alt="Vodka">
+                <h3>Vodka</h3><p>Ideal para cócteles frescos.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('barranquilla-tequila')">
+                <img src="https://shakeadito.com/wp-content/uploads/2022/05/TEQUILA-PARA-COCTELERIA_PORTADA-NOTA-1370x929.jpg" alt="Tequila">
+                <h3>Tequila</h3><p>Sabor mexicano que alegra el ambiente.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="bogota" class="ciudad">
+        <h2>🌃 Bogotá</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-cervezas')">
+                <img src="https://uvn-brightspot.s3.amazonaws.com/assets/vixes/imj/C/Cerveza-elaborada-con-carne-de-ballena-1.jpg" alt="Cervezas">
+                <h3>Cervezas</h3><p>Perfectas para el frío de la capital.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-vinos')">
+                <img src="https://revistadiners.com.co/wp-content/uploads/2025/09/shutterstock_2630926643.jpg" alt="Vinos">
+                <h3>Vinos</h3><p>Ideales para acompañar la gastronomía andina.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-aguardiente')">
+                <img src="https://www.licoresentrerios.com/wp-content/uploads/2023/12/cd000d36-c288-498f-8e6c-c91f2ec914de.jpeg" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>Esencial en celebraciones.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-whisky')">
+                <img src="https://www.elespectador.com/resizer/Fl3CwUdZ879gsiOu3wULKLnznDQ=/arc-anglerfish-arc2-prod-elespectador/public/76UA7WZAY5FSXK34EYKUKBU7TM.jpg" alt="Whisky">
+                <h3>Whisky</h3><p>La bebida elegante de la noche bogotana.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-vodka')">
+                <img src="https://glassbottlesbulk.com/wp-content/uploads/2025/05/vodka_compressed.jpg" alt="Vodka">
+                <h3>Vodka</h3><p>La base perfecta para coctelería.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('bogota-tequila')">
+                <img src="https://images.ctfassets.net/qbvb79w96uc8/2JEhnz8fMNTH35sRjaocK5/605094a44e5748037a91845d63af6166/teremana-tequila-collection-mobile-banner.jpg" alt="Tequila">
+                <h3>Tequila</h3><p>El toque picante para las fiestas.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="boyaca" class="ciudad">
+        <h2>🥔 Boyacá</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-cervezas')">
+                <img src="https://cdn.colombia.com/sdi/2025/10/14/oktoberfest-artesanal-en-bogota-donde-se-realizara-1305326-0.jpg" alt="Cervezas">
+                <h3>Cervezas</h3><p>Para brindar en la tierra de la libertad.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-vinos')">
+                <img src="https://images.unsplash.com/photo-1558670460-cad0c19b1840?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE3fHx8ZW58MHx8fHx8" alt="Vinos">
+                <h3>Vinos</h3><p>Vinos de altura y tradición.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-aguardiente')">
+                <img src="https://clubbin-images.s3.amazonaws.com/kV6l2nNRr4PC.jpeg" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>Tradicional para el frío boyacense.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-whisky')">
+                <img src="https://images.ctfassets.net/6zncp07wiqyq/6ra7er8KGDxBNIlaPPP6EF/e53ef57aac73ac2e61f0ea2fb10292b6/media_mlkn3pbg_dba_scotch_whisky_cat_page_hero.jpg" alt="Whisky">
+                <h3>Whisky</h3><p>Para reuniones especiales.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-vodka')">
+                <img src="https://images.ctfassets.net/nhvvc9v3qesf/55wAQLO4eZFi91hEjWVEfD/ebae243dca499d59dc54d21f9f2bae39/Ketel_One_Vodka_Collins_en_vaso_de_whiskey_con_una_cereza.jpg" alt="Vodka">
+                <h3>Vodka</h3><p>Bebidas blancas para cócteles.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('boyaca-tequila')">
+                <img src="https://hips.hearstapps.com/hmg-prod/images/mejores-tequilas-esquire-1621264239.jpg?crop=0.8942222222222221xw:1xh;center,top&resize=1200:*" alt="Tequila">
+                <h3>Tequila</h3><p>Un toque internacional.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cali" class="ciudad">
+        <h2>🕺 Cali 💃</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-cervezas')">
+                <img src="https://www.univision.com/_next/image?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fimj%2Fvivirsalud%2F8%2F80613357.jpg&w=1280&q=75" alt="Cervezas">
+                <h3>Cervezas</h3><p>La opción refrescante para el calor de la salsa.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-vinos')">
+                <img src="https://cloudfront-eu-central-1.images.arcpublishing.com/prisaradio/HPVBGTXSXBHJTBOFKCZSLN6IXE.jpg" alt="Vinos">
+                <h3>Vinos</h3><p>Para cenas románticas y eventos.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-aguardiente')">
+                <img src="https://revistadc.com/wp-content/uploads/2023/03/Empresa-de-Licores-de-Cundinamarca.jpg" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>El rey de la fiesta caleña y la Feria.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-whisky')">
+                <img src="https://humoytabaco.com/wp-content/uploads/2025/04/buchanans-12-01.jpg?w=1568" alt="Whisky">
+                <h3>Whisky</h3><p>La bebida fuerte en discotecas y estancos.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-vodka')">
+                <img src="https://images.ctfassets.net/6zncp07wiqyq/18czSzx9yZ0FEpFqAvVWwh/ecd2869137f362ffdb7d997337367105/smirnoff-hero.jpg_.jpg" alt="Vodka">
+                <h3>Vodka</h3><p>Para mezclas en las noches de rumba.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cali-tequila')">
+                <img src="https://vinumcr.com/wp-content/uploads/2020/06/1216670-Don-Julio-Tequila-An%CC%83ejo-5.jpg" alt="Tequila">
+                <h3>Tequila</h3><p>Sabor mexicano para compartir.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cartagena" class="ciudad">
+        <h2>🏖️ Cartagena</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-cervezas')">
+                <img src="https://www.univision.com/_next/image?url=https%3A%2F%2Fuvn-brightspot.s3.amazonaws.com%2Fassets%2Fvixes%2Fimj%2Fotramedicina%2F5%2F5-Beneficios-de-beber-cerveza-1.jpg&w=1280&q=75" alt="Cervezas">
+                <h3>Cervezas</h3><p>La bebida perfecta para el sol y la muralla.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-vinos')">
+                <img src="https://www.acepavella.com/images/amplia-variedad-vinos-cepa.jpg" alt="Vinos">
+                <h3>Vinos</h3><p>Ideales para acompañar mariscos frescos.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-aguardiente')">
+                <img src="https://ciudadsur.co/wp-content/uploads/2025/02/aguardientes.jpg" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>Para la fiesta y las noches calurosas.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-whisky')">
+                <img src="https://media.gq.com.mx/photos/674e8003d9cd339483149d95/2:3/w_1124,h_1686,c_limit/whisky.jpg" alt="Whisky">
+                <h3>Whisky</h3><p>Licores importados y premium.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-vodka')">
+                <img src="https://atencion24.ar/wp-content/uploads/2022/10/a82844db-23b7-4bd5-890d-e1a95669febe-600x798.jpg" alt="Vodka">
+                <h3>Vodka</h3><p>Bebidas cristalinas para cócteles de playa.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('cartagena-tequila')">
+                <img src="https://carulla.vtexassets.com/arquivos/ids/19573048/Tequila-Altos-Reposado-X-700-ml-296188_c.jpg?v=638739777029100000" alt="Tequila">
+                <h3>Tequila</h3><p>Para la diversión de la zona amurallada.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="medellin" class="ciudad">
+        <h2>🪩 Medellín</h2>
+        <div class="galeria-licores">
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-cervezas')">
+                <img src="https://www.noticiassuper.com/wp-content/uploads/2024/08/Cerveza.jpg" alt="Cervezas">
+                <h3>Cervezas</h3><p>Para acompañar el clima primaveral.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-vinos')">
+                <img src="https://st5.depositphotos.com/8640372/66862/i/450/depositphotos_668623116-stock-photo-man-holding-wine-bottle-liquor.jpg" alt="Vinos">
+                <h3>Vinos</h3><p>Para disfrutar en Provenza y El Poblado.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-aguardiente')">
+                <img src="https://www.semana.com/resizer/v2/F3C2CD23BBCZFKSRTIUJYG4URA.jpg?auth=e2b4aef810a8df652ff5b5252e0437bc3614331b62f64a49adfa626b45b5f02a&smart=true&quality=75&width=1280&fitfill=false" alt="Aguardiente">
+                <h3>Aguardiente</h3><p>¡El Aguardiente Antioqueño es el de casa!</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-whisky')">
+                <img src="https://dkristal.es/wp-content/uploads/2019/06/whisky1.jpg" alt="Whisky">
+                <h3>Whisky</h3><p>El licor favorito en los bares de Medellín.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-vodka')">
+                <img src="https://www.absolutdrinks.com/wp-content/uploads/recipe_absolut-vanilia-soda_1x1_2e103f60f40db62f23d1c7e88154bcae.jpg" alt="Vodka">
+                <h3>Vodka</h3><p>Para coctelería de vanguardia.</p>
+            </div>
+            <div class="tarjeta" onclick="mostrarSubcategoria('medellin-tequila')">
+                <img src="https://www.diageo.com/~/media/Images/D/Diageo-V2/Universal/text-image/don-julio-peach-cocktail-new.webp?w=556" alt="Tequila">
+                <h3>Tequila</h3><p>El toque picante para la rumba paisa.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="barranquilla-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>Cervezas Típicas de Barranquilla</h3>
+        <p>El calor de la costa requiere bebidas refrescantes. Las cervezas nacionales y locales son la mejor opción para la playa y el carnaval:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://mir-s3-cdn-cf.behance.net/project_modules/1400_webp/79bb9276043789.5df7f96fa5413.jpg" alt="Cerveza Águila">
+                <h4>Águila: La Reina del Caribe</h4>
+                <p>La cerveza de la costa por excelencia. Perfecta para tomar "fría" o "helada" en el Carnaval. Su sabor ligero es ideal para el clima tropical.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://i.pinimg.com/564x/09/3d/ca/093dcac3e419e10362b77cc9dc294b02.jpg" alt="Cerveza Costeñita">
+                <h4>Costeñita: La Refrescante</h4>
+                <p>Una opción más ligera y en presentación pequeña, ideal para calmar la sed rápidamente. El sabor suave y refrescante es muy popular en los estancos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://m.media-amazon.com/images/I/61yanFphSOL.jpg" alt="Cervezas Artesanales">
+                <h4>Club Colombia</h4>
+                <p>Una cerveza con carácter y distinción, disponible en versiones Dorada, Roja y Negra. Su sabor balanceado y cuerpo robusto la convierten en la preferida para acompañar comidas o celebrar ocasiones especiales.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="barranquilla-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>Vinos en la Arenosa</h3>
+        <p>Aunque el caribe no es tradicionalmente vinícola, los vinos blancos y rosados fríos son ideales para acompañar mariscos:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTk-LXs7VeME0cHFWdK3XhEQSf6Xmn-9r3Vjg&s" alt="Vino Blanco">
+                <h4>Vinos Blancos</h4>
+                <p>Perfectos para acompañar la gastronomía de mar. Se beben muy fríos para contrarrestar el calor.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://chateauberne-vin.com/cdn/shop/articles/BERNE_ROMANCE_LIFESTYLE_SQUARE_FORMAT_1400x_1_2c2585a9-2ec4-40f1-8b6d-1d62d9b9cf6c.jpg?v=1667468180" alt="Vino Rosado">
+                <h4>Vinos Rosados</h4>
+                <p>La opción más refrescante para las celebraciones sociales en la playa o en la zona amurallada.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://lacaretalicores.com/cdn/shop/products/VINOTINTORESERVADOCARMENERE.jpg?v=1623275013&width=600" alt="Vino Rosado">
+                <h4>Vinos Tintos</h4>
+                <p>Marcas clásicas importadas, aunque menos consumidas que las bebidas frescas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="barranquilla-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>Aguardiente y Ron de la Costa</h3>
+        <p>En el caribe, el Ron compite en popularidad con el Aguardiente. Ambos son esenciales en la rumba costeña:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1884-large_default/ron-viejo-de-caldas-750ml.jpg" alt="Ron Viejo de Caldas">
+                <h4>Ron Viejo de Caldas</h4>
+                <p>Uno de los rones colombianos más consumidos. Usualmente se mezcla con cola o se toma solo con hielo.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1528-large_default/aguardiente-antioqueno-sin-azucar-750ml.jpg" alt="Aguardiente Sin Azúcar">
+                <h4>Aguardiente Antioqueño (Sin Azúcar)</h4>
+                <p>El aguardiente más popular a nivel nacional. En la costa se prefiere la versión sin azúcar para evitar la deshidratación.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/3990-large_default/ron-medellin-8-anos-750ml.jpg" alt="Ron Medellín">
+                <h4>Ron Medellín</h4>
+                <p>Un ron de sabor suave y añejo, perfecto para tomar solo o en cocteles clásicos.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="barranquilla-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>Whisky y Elegancia</h3>
+        <p>El whisky es la bebida de preferencia en eventos y reuniones formales, especialmente en las zonas de alto nivel:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://static.wixstatic.com/media/7e0c47_8d97e3a129034f598b9538c5d1e2b207~mv2.jpg/v1/fill/w_500,h_500,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/7e0c47_8d97e3a129034f598b9538c5d1e2b207~mv2.jpg" alt="Whisky Blended">
+                <h4>Whisky Escocés Blended</h4>
+                <p>Las marcas populares de whisky escocés mezclado son las más consumidas en bares y estancos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1971-large_default/whisky-jack-daniels-750ml.jpg" alt="Whisky Americano">
+                <h4>Whisky Americano (Bourbon)</h4>
+                <p>El bourbon y el Tennessee Whiskey son populares para mezclas en cocteles más atrevidos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1090-large_default/whisky-chivas-regal-12-anos-750ml.jpg" alt="Whisky Premium">
+                <h4>Whiskies Premium</h4>
+                <p>Para ocasiones especiales, se consumen marcas de lujo y whiskies Single Malt.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="barranquilla-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>Vodka y Coctelería</h3>
+        <p>El vodka es ideal para la coctelería tropical y las noches de discoteca, mezclado con jugos de frutas.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1521-large_default/vodka-smirnoff-750ml.jpg" alt="Smirnoff">
+                <h4>Smirnoff y Absolut</h4>
+                <p>Las marcas internacionales más conocidas son las favoritas para mezclas sencillas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/3483-large_default/vodka-ciroc-750ml.jpg" alt="Ciroc">
+                <h4>Vodka Premium</h4>
+                <p>Vodkas de alta gama usados para coctelería más elaborada en bares exclusivos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/1521-large_default/vodka-smirnoff-750ml.jpg" alt="Smirnoff">
+                <h4>Smirnoff y Absolut</h4>
+                <p>Las marcas internacionales más conocidas son las favoritas para mezclas sencillas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="barranquilla-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('barranquilla')">← Volver a Barranquilla</button>
+        <h3>El Toque Mexicano</h3>
+        <p>El tequila se ha popularizado para las fiestas temáticas y para tomar en shots o margaritas.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/3663-large_default/tequila-jose-cuervo-especial-reposado-750ml.jpg" alt="Jose Cuervo">
+                <h4>Tequila Reposado</h4>
+                <p>Las versiones reposado o añejo son comunes para tomar solos o con naranja y canela.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/2678-large_default/tequila-don-julio-blanco-750ml.jpg" alt="Don Julio">
+                <h4>Margaritas y Shots</h4>
+                <p>El tequila blanco se usa predominantemente para shots y la preparación de cocteles de lima.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://licoresmundiales.com/3663-large_default/tequila-jose-cuervo-especial-reposado-750ml.jpg" alt="Jose Cuervo">
+                <h4>Tequila Reposado</h4>
+                <p>Las versiones reposado o añejo son comunes para tomar solos o con naranja y canela.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Cervezas de la Capital</h3>
+        <p>La cerveza es la bebida social por excelencia, con gran presencia de marcas industriales y artesanales:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=50" alt="Cerveza BBC">
+                <h4>Cervezas Artesanales</h4>
+                <p>Gran variedad de marcas artesanales (BBC, 3 Cordilleras, etc.), muy populares en la zona norte.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=50" alt="Club Colombia">
+                <h4>Club Colombia</h4>
+                <p>La cerveza premium nacional, muy consumida en la capital, con sus versiones Dorada, Roja y Negra.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=50" alt="Club Colombia">
+                <h4>Club Colombia</h4>
+                <p>La cerveza premium nacional, muy consumida en la capital, con sus versiones Dorada, Roja y Negra.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Vinos de Altura</h3>
+        <p>En Bogotá, predomina el consumo de vino tinto importado, ideal para acompañar el frío y las cenas formales.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=52" alt="Vino Chileno/Argentino">
+                <h4>Tintos Clásicos</h4>
+                <p>Predominan las cepas Cabernet Sauvignon y Merlot de Chile y Argentina, perfectas para el clima andino y las carnes rojas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=53" alt="Vinos Espumosos">
+                <h4>Espumosos y Cava</h4>
+                <p>Muy populares en eventos y celebraciones sociales, consumidos en los restaurantes y bares de las zonas más exclusivas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=53" alt="Vinos Espumosos">
+                <h4>Espumosos y Cava</h4>
+                <p>Muy populares en eventos y celebraciones sociales, consumidos en los restaurantes y bares de las zonas más exclusivas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Aguardiente Néctar (Cundinamarca)</h3>
+        <p>El Aguardiente Néctar es la bebida tradicional de la región de Cundinamarca y es el favorito en la capital:</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=54" alt="Néctar Club">
+                <h4>Néctar Club (Sin Azúcar)</h4>
+                <p>La versión sin azúcar es la más popular, ideal para compartir en el famoso 'remate' de las fiestas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=54" alt="Néctar Club">
+                <h4>Néctar Club (Sin Azúcar)</h4>
+                <p>La versión sin azúcar es la más popular, ideal para compartir en el famoso 'remate' de las fiestas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=54" alt="Néctar Club">
+                <h4>Néctar Club (Sin Azúcar)</h4>
+                <p>La versión sin azúcar es la más popular, ideal para compartir en el famoso 'remate' de las fiestas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Whisky en la Noche Bogotana</h3>
+        <p>El whisky, especialmente el escocés y el de malta, es la bebida de preferencia en bares y discotecas de alta gama en zonas como la Zona Rosa.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Whisky Escocés">
+                <h4>Scotch Blended</h4>
+                <p>Marcas clásicas escocesas, preferidas en las reuniones sociales y corporativas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Whisky Escocés">
+                <h4>Scotch Blended</h4>
+                <p>Marcas clásicas escocesas, preferidas en las reuniones sociales y corporativas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Whisky Escocés">
+                <h4>Scotch Blended</h4>
+                <p>Marcas clásicas escocesas, preferidas en las reuniones sociales y corporativas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Vodka y Coctelería Moderna</h3>
+        <p>El vodka es un licor clave en la coctelería de vanguardia que se ofrece en la capital.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Marcas como Absolut, Smirnoff y Grey Goose son la base para el 'Moscow Mule' o el 'Cosmopolitan'.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Marcas como Absolut, Smirnoff y Grey Goose son la base para el 'Moscow Mule' o el 'Cosmopolitan'.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=57" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Marcas como Absolut, Smirnoff y Grey Goose son la base para el 'Moscow Mule' o el 'Cosmopolitan'.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="bogota-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('bogota')">← Volver a Bogotá</button>
+        <h3>Tequila para la Noche</h3>
+        <p>El tequila se consume en shots y para coctelería, con gran presencia en los bares de música crossover.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Cervezas de la Región</h3>
+        <p>La cerveza es una opción refrescante en los climas templados de la región, complementando al tradicional aguardiente.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Cerveza Club Colombia">
+                <h4>Club Colombia y Póker</h4>
+                <p>Las marcas industriales son las más vendidas, consumidas en tiendas y restaurantes.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Cerveza Club Colombia">
+                <h4>Club Colombia y Póker</h4>
+                <p>Las marcas industriales son las más vendidas, consumidas en tiendas y restaurantes.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Cerveza Club Colombia">
+                <h4>Club Colombia y Póker</h4>
+                <p>Las marcas industriales son las más vendidas, consumidas en tiendas y restaurantes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Vinos Boyacenses</h3>
+        <p>Boyacá es una de las pocas regiones de Colombia con producción local de vino de altura.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=59" alt="Vino Boyacense">
+                <h4>Viña Santa Elena</h4>
+                <p>Vinos de altura y tradición, cultivados en las zonas montañosas del departamento.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=59" alt="Vino Boyacense">
+                <h4>Viña Santa Elena</h4>
+                <p>Vinos de altura y tradición, cultivados en las zonas montañosas del departamento.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=59" alt="Vino Boyacense">
+                <h4>Viña Santa Elena</h4>
+                <p>Vinos de altura y tradición, cultivados en las zonas montañosas del departamento.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Aguardiente Líder y Ron Boyacá</h3>
+        <p>La Industria de Licores de Boyacá produce el Aguardiente Líder, su marca insigne.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=60" alt="Aguardiente Líder">
+                <h4>Aguardiente Líder</h4>
+                <p>La marca regional que acompaña las ferias y fiestas de los pueblos, consumido para calentar el cuerpo.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=60" alt="Aguardiente Líder">
+                <h4>Aguardiente Líder</h4>
+                <p>La marca regional que acompaña las ferias y fiestas de los pueblos, consumido para calentar el cuerpo.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=60" alt="Aguardiente Líder">
+                <h4>Aguardiente Líder</h4>
+                <p>La marca regional que acompaña las ferias y fiestas de los pueblos, consumido para calentar el cuerpo.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Whisky en las Alturas</h3>
+        <p>El whisky se consume en menor medida que el aguardiente, siendo una opción para celebraciones especiales.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Whisky Escocés">
+                <h4>Whisky Blended</h4>
+                <p>Marcas clásicas escocesas, consumidas principalmente en Tunja y Duitama.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Whisky Escocés">
+                <h4>Whisky Blended</h4>
+                <p>Marcas clásicas escocesas, consumidas principalmente en Tunja y Duitama.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Whisky Escocés">
+                <h4>Whisky Blended</h4>
+                <p>Marcas clásicas escocesas, consumidas principalmente en Tunja y Duitama.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Vodka y Tequila</h3>
+        <p>Estos licores tienen una presencia limitada, siendo más populares en las zonas urbanas de la región.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vodka">
+                <h4>Vodka</h4>
+                <p>Utilizado para coctelería sencilla, mezclado con jugos y bebidas gaseosas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vodka">
+                <h4>Vodka</h4>
+                <p>Utilizado para coctelería sencilla, mezclado con jugos y bebidas gaseosas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vodka">
+                <h4>Vodka</h4>
+                <p>Utilizado para coctelería sencilla, mezclado con jugos y bebidas gaseosas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="boyaca-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('boyaca')">← Volver a Boyacá</button>
+        <h3>Tequila para la Noche</h3>
+        <p>El tequila se consume en shots y para coctelería, con gran presencia en los bares de música crossover.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cali-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Cervezas Caleñas</h3>
+        <p>La cerveza es la opción más popular para acompañar el calor y la salsa.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Cerveza Aguila">
+                <h4>Águila y Poker</h4>
+                <p>Las cervezas nacionales más consumidas, siempre muy frías, para la rumba y los encuentros sociales.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Cerveza Aguila">
+                <h4>Águila y Poker</h4>
+                <p>Las cervezas nacionales más consumidas, siempre muy frías, para la rumba y los encuentros sociales.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Cerveza Aguila">
+                <h4>Águila y Poker</h4>
+                <p>Las cervezas nacionales más consumidas, siempre muy frías, para la rumba y los encuentros sociales.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cali-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Vinos y Champañas</h3>
+        <p>Los vinos blancos y espumosos son preferidos para acompañar la gastronomía del Pacífico y las cenas elegantes.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vino Blanco">
+                <h4>Vinos Blancos</h4>
+                <p>Ideales para el clima cálido, consumidos en restaurantes de la zona rosa.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vino Blanco">
+                <h4>Vinos Blancos</h4>
+                <p>Ideales para el clima cálido, consumidos en restaurantes de la zona rosa.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=61" alt="Vino Blanco">
+                <h4>Vinos Blancos</h4>
+                <p>Ideales para el clima cálido, consumidos en restaurantes de la zona rosa.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cali-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Aguardiente Blanco del Valle</h3>
+        <p>El Aguardiente Blanco del Valle es el licor insignia de la región y el protagonista de la Feria de Cali.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=62" alt="Blanco del Valle">
+                <h4>Blanco del Valle Sin Azúcar</h4>
+                <p>La versión más promocionada y consumida en la región, más ligera y pura.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=62" alt="Blanco del Valle">
+                <h4>Blanco del Valle Sin Azúcar</h4>
+                <p>La versión más promocionada y consumida en la región, más ligera y pura.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=62" alt="Blanco del Valle">
+                <h4>Blanco del Valle Sin Azúcar</h4>
+                <p>La versión más promocionada y consumida en la región, más ligera y pura.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cali-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Whisky y Sabor Caleño</h3>
+        <p>El whisky, junto con el ron, es popular en las discotecas y estancos de la capital de la salsa.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Usualmente mezclado con gaseosa de cola o jengibre, es la opción fuerte de la rumba.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Usualmente mezclado con gaseosa de cola o jengibre, es la opción fuerte de la rumba.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Usualmente mezclado con gaseosa de cola o jengibre, es la opción fuerte de la rumba.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cali-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Vodka y Tequila Caleño</h3>
+        <p>Licores utilizados para coctelería fresca en el clima tropical del Valle del Cauca.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>La base para bebidas refrescantes con jugos naturales y limón.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>La base para bebidas refrescantes con jugos naturales y limón.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>La base para bebidas refrescantes con jugos naturales y limón.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cali-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cali')">← Volver a Cali</button>
+        <h3>Tequila para la Rumba</h3>
+        <p>Ideal para compartir en shots en la rumba crossover.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Sabor mexicano para compartir y animar la fiesta.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Sabor mexicano para compartir y animar la fiesta.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Sabor mexicano para compartir y animar la fiesta.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cartagena-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Cervezas y Cocteles</h3>
+        <p>La cerveza es la reina indiscutible para combatir el calor caribeño en la playa.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Cerveza Águila">
+                <h4>Águila y Costeña</h4>
+                <p>Las marcas locales son las más consumidas, siempre muy frías, la bebida perfecta para el sol y la muralla.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Cócteles con Cerveza">
+                <h4>Cócteles de Playa</h4>
+                <p>Fusión de cerveza con limón y sal para refrescarse, la bebida perfecta para el sol y la muralla.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=63" alt="Cócteles con Cerveza">
+                <h4>Cócteles de Playa</h4>
+                <p>Fusión de cerveza con limón y sal para refrescarse, la bebida perfecta para el sol y la muralla.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartagena-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Vinos y Maridaje</h3>
+        <p>Los vinos blancos y rosados son ideales para acompañar los mariscos y la cocina caribeña.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Vino Blanco">
+                <h4>Vinos Blancos Frescos</h4>
+                <p>Consumidos muy fríos en los restaurantes de la zona amurallada.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Vino Blanco">
+                <h4>Vinos Blancos Frescos</h4>
+                <p>Consumidos muy fríos en los restaurantes de la zona amurallada.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Vino Blanco">
+                <h4>Vinos Blancos Frescos</h4>
+                <p>Consumidos muy fríos en los restaurantes de la zona amurallada.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartagena-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Ron y Aguardiente Costeño</h3>
+        <p>El Ron compite fuertemente con el Aguardiente, siendo ambos licores claves en la noche cartagenera.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Ron Havana Club">
+                <h4>Ron Bacardí y Havana Club</h4>
+                <p>Rones caribeños importados, muy comunes debido al alto turismo en la ciudad.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Ron Havana Club">
+                <h4>Ron Bacardí y Havana Club</h4>
+                <p>Rones caribeños importados, muy comunes debido al alto turismo en la ciudad.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=64" alt="Ron Havana Club">
+                <h4>Ron Bacardí y Havana Club</h4>
+                <p>Rones caribeños importados, muy comunes debido al alto turismo en la ciudad.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartagena-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Whisky de Importación</h3>
+        <p>Debido al alto turismo, Cartagena tiene una gran oferta de whiskies y licores importados.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Consumido en las zonas turísticas y de fiesta de la ciudad.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Consumido en las zonas turísticas y de fiesta de la ciudad.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Whisky Blended">
+                <h4>Whisky Blended</h4>
+                <p>Consumido en las zonas turísticas y de fiesta de la ciudad.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="cartagena-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Vodka y Tequila en la Muralla</h3>
+        <p>Licores populares en coctelería tropical.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>Para cocteles con frutas, ideal para el clima de la costa.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>Para cocteles con frutas, ideal para el clima de la costa.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vodka Smirnoff">
+                <h4>Vodka</h4>
+                <p>Para cocteles con frutas, ideal para el clima de la costa.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartagena-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('cartagena')">← Volver a Cartagena</button>
+        <h3>Tequila para la Noche</h3>
+        <p>El tequila se consume en shots y para coctelería, con gran presencia en los bares de música crossover.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="medellin-cervezas" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Cervezas Paisas</h3>
+        <p>La cerveza es una de las opciones favoritas para compartir, especialmente en la temporada de Feria de las Flores.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Cerveza Pilsen">
+                <h4>Pilsen</h4>
+                <p>La cerveza local de la región antioqueña, tradicionalmente ligada a la Feria de las Flores.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Cerveza Pilsen">
+                <h4>Pilsen</h4>
+                <p>La cerveza local de la región antioqueña, tradicionalmente ligada a la Feria de las Flores.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Cerveza Pilsen">
+                <h4>Pilsen</h4>
+                <p>La cerveza local de la región antioqueña, tradicionalmente ligada a la Feria de las Flores.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="medellin-vinos" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Vinos en la Ciudad de la Eterna Primavera</h3>
+        <p>El consumo de vino ha crecido en la ciudad, especialmente en zonas de alta gastronomía.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vino Tinto">
+                <h4>Vinos Tintos</h4>
+                <p>Cepa Cabernet Sauvignon y Malbec son populares para acompañar cenas en El Poblado.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vino Tinto">
+                <h4>Vinos Tintos</h4>
+                <p>Cepa Cabernet Sauvignon y Malbec son populares para acompañar cenas en El Poblado.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=65" alt="Vino Tinto">
+                <h4>Vinos Tintos</h4>
+                <p>Cepa Cabernet Sauvignon y Malbec son populares para acompañar cenas en El Poblado.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="medellin-aguardiente" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Aguardiente Antioqueño</h3>
+        <p>El Aguardiente Antioqueño es la bebida nacional más emblemática y la de mayor consumo en la región, producido por la FLA.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Aguardiente Antioqueño">
+                <h4>Antioqueño Tapa Azul (Sin Azúcar)</h4>
+                <p>La versión dominante, la bebida oficial de la fiesta paisa y el licor más vendido en el país.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Aguardiente Antioqueño">
+                <h4>Antioqueño Tapa Azul (Sin Azúcar)</h4>
+                <p>La versión dominante, la bebida oficial de la fiesta paisa y el licor más vendido en el país.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Aguardiente Antioqueño">
+                <h4>Antioqueño Tapa Azul (Sin Azúcar)</h4>
+                <p>La versión dominante, la bebida oficial de la fiesta paisa y el licor más vendido en el país.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="medellin-whisky" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Whisky y Rumba Paisa</h3>
+        <p>El whisky es una bebida de estatus y muy consumida en la rumba, especialmente en Envigado y El Poblado.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Whisky Blended">
+                <h4>Whisky Escocés</h4>
+                <p>Las marcas mezcladas y de 12 años son las más solicitadas en bares y discotecas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Whisky Blended">
+                <h4>Whisky Escocés</h4>
+                <p>Las marcas mezcladas y de 12 años son las más solicitadas en bares y discotecas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Whisky Blended">
+                <h4>Whisky Escocés</h4>
+                <p>Las marcas mezcladas y de 12 años son las más solicitadas en bares y discotecas.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="medellin-vodka" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Vodka en la Ciudad</h3>
+        <p>Ideal para coctelería fresca en el clima templado.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Usado para crear bebidas de sabor neutro y mezclas de frutas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Usado para crear bebidas de sabor neutro y mezclas de frutas.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=66" alt="Vodka Absolut">
+                <h4>Vodka Importado</h4>
+                <p>Usado para crear bebidas de sabor neutro y mezclas de frutas.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="medellin-tequila" class="subcategoria">
+        <button class="volver" onclick="mostrarCiudad('medellin')">← Volver a Medellín</button>
+        <h3>Tequila para la Fiesta</h3>
+        <p>El tequila se consume en shots y para coctelería, con gran presencia en los bares de música crossover.</p>
+        <div class="galeria-contenido">
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+            <div class="tarjeta-contenido">
+                <img src="https://picsum.photos/400/300?random=58" alt="Tequila Reposado">
+                <h4>Tequila Reposado</h4>
+                <p>Ideal para tomar con sal y limón, es popular para las celebraciones de amigos.</p>
+            </div>
+        </div>
+    </div>
+    
+    </div>
+<hr><hr>
+
+<section id="contacto" style="padding: 40px; text-align: center;">
+    <h2>Contáctanos</h2>
+    <p>¿Tienes alguna pregunta o quieres colaborar? Escríbenos.</p>
+    <p>Email: contacto@entrecopasytradiciones.com</p>
+    <div style="margin-top: 20px;">
+        <a href="https://www.facebook.com" target="_blank" style="margin: 0 10px; color: white;">Facebook</a>
+        <a href="https://www.instagram.com" target="_blank" style="margin: 0 10px; color: white;">Instagram</a>
+    </div>
+</section>
+
+<footer>
+    <p>© 2024 Entre Copas & Tradiciones. Todos los derechos reservados. | 🍻 Colombia.</p>
+    <p>El exceso de alcohol es perjudicial para la salud. Ley 30 de 1986.<p/>
+    <p>Prohíbase el expendio de bebidas embriagantes a menores de edad y mujeres embarazadas. Ley 124 de 1994.</p>
+</footer>
+
+<script>
+    // =======================================================
+    // NUEVA FUNCIÓN PARA MOSTRAR/OCULTAR SECCIÓN DE CIUDADES
+    // =======================================================
+    function toggleCiudades(event) {
+        event.preventDefault(); // Evita que la página salte al hash #
+        const container = document.getElementById('ciudades-container');
+        
+        if (container.style.display === 'none' || container.style.display === '') {
+            container.style.display = 'block';
+            // Desplazarse suavemente al inicio del contenedor al mostrarlo
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' }); 
+        } else {
+            container.style.display = 'none';
+        }
+
+        // Opcional: Ocultar cualquier sección de ciudad o subcategoría activa
+        document.querySelectorAll('.ciudad.active, .subcategoria.active').forEach(el => {
+            el.classList.remove('active');
+        });
+    }
+
+    // =======================================================
+    // FUNCIONES EXISTENTES DE VISIBILIDAD DE CIUDADES Y CARRUSEL
+    // =======================================================
+
+    // Función para mostrar la ciudad seleccionada y ocultar las demás
+    function mostrarCiudad(idCiudad) {
+        // 1. Ocultar todas las secciones de ciudad y subcategoría
+        document.querySelectorAll('.ciudad, .subcategoria').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // 2. Mostrar la ciudad seleccionada
+        const ciudadActiva = document.getElementById(idCiudad);
+        if (ciudadActiva) {
+            ciudadActiva.classList.add('active');
+            ciudadActiva.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // Función para mostrar la subcategoría seleccionada
+    function mostrarSubcategoria(idSubcategoria) {
+        // 1. Ocultar todas las secciones de ciudad y subcategoría
+        document.querySelectorAll('.ciudad, .subcategoria').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // 2. Mostrar la subcategoría seleccionada
+        const subcategoriaActiva = document.getElementById(idSubcategoria);
+        if (subcategoriaActiva) {
+            subcategoriaActiva.classList.add('active');
+            subcategoriaActiva.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    
+    // Configuración del Carrusel
+    const slides = document.querySelectorAll('.carousel img');
+    const indicatorsContainer = document.querySelector('.indicators');
+    let currentSlide = 3; // Empieza en el índice 3 (Festival-Cali), ya que tiene la clase 'active' inicial
+
+    const showSlide = (n) => {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[n].classList.add('active');
+        updateIndicators(n);
+    };
+
+    // Crear y añadir los puntos (dots)
+    slides.forEach((s, i) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.addEventListener('click', () => showSlide(i));
+        indicatorsContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+    const updateIndicators = (n) => {
+        dots.forEach((dot, i) => {
+            dot.classList.remove('active');
+            if (i === n) dot.classList.add('active');
+        });
+    };
+
+    document.querySelector('.carousel .next').addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    });
+
+    document.querySelector('.carousel .prev').addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    });
+
+    // Función para el carrusel automático (AHORA ACTIVA)
+    const startCarousel = () => {
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }, 5000); // Cambia de slide cada 5 segundos (5000ms)
+    };
+
+    // Inicialización al cargar la página
+    showSlide(currentSlide);
+    startCarousel();
+
+</script>
+
+</body>
+</html>
